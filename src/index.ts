@@ -198,7 +198,5 @@ process.on('uncaughtException', (error) => {
   process.exit(1);
 });
 
-// Run if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
-}
+// Run the main function
+main();
