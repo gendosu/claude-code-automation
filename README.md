@@ -19,7 +19,32 @@
 
 ## 🚀 クイックスタート
 
-### 1. セットアップ
+### 方法1: npxで実行（推奨）
+
+```bash
+# 最新版を直接実行
+npx claude-code-automation-gendosu@latest
+
+# ヘルプを表示
+npx claude-code-automation-gendosu@latest --help
+
+# デーモンモードで実行
+npx claude-code-automation-gendosu@latest --daemon
+
+# カスタム間隔でデーモン実行（10分間隔）
+npx claude-code-automation-gendosu@latest --daemon --interval 600
+```
+
+**環境変数設定:**
+```bash
+# 環境変数を設定してから実行
+export GITHUB_TOKEN=ghp_your_token_here
+export GITHUB_OWNER=your_username
+export GITHUB_REPO=your_repository
+npx claude-code-automation-gendosu@latest
+```
+
+### 方法2: ローカルセットアップ
 
 ```bash
 # スクリプトディレクトリに移動
