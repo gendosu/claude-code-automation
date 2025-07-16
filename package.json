@@ -12,6 +12,7 @@
     "README.md",
     "CLAUDE.md"
   ],
+  "preferGlobal": true,
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
@@ -37,7 +38,8 @@
     "node": ">=18"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
   },
   "repository": {
     "type": "git",
