@@ -5,6 +5,49 @@ import { IssueAutomation } from './issue-automation.js';
 import { Logger } from './logger.js';
 import { loadConfig, validateConfig } from './config.js';
 
+// CLI argument parsing
+function parseArguments(): { daemon: boolean; interval?: number; help: boolean } {
+  const args = process.argv.slice(2);
+  const result: { daemon: boolean; interval?: number; help: boolean } = { daemon: false, interval: undefined, help: false };
+  
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    
+    if (arg === '--daemon' || arg === '-d') {
+      result.daemon = true;
+    } else if (arg === '--interval' || arg === '-i') {
+      const intervalArg = args[++i];
+      if (intervalArg && !isNaN(Number(intervalArg))) {
+        result.interval = Number(intervalArg) * 1000; // Convert to milliseconds
+      } else {
+        throw new Error('Invalid interval value. Please provide a number in seconds.');
+      }
+    } else if (arg === '--help' || arg === '-h') {
+      result.help = true;
+    } else {
+      throw new Error(`Unknown argument: ${arg}`);
+    }
+  }
+  
+  return result;
+}
+
+function showHelp(): void {
+  console.log(`
+Usage: npx claude-code-automation [options]
+
+Options:
+  --daemon, -d          Run in daemon mode (continuous monitoring)
+  --interval, -i <sec>  Set daemon interval in seconds (default: 300)
+  --help, -h           Show this help message
+
+Examples:
+  npx claude-code-automation              # Run once
+  npx claude-code-automation --daemon     # Run in daemon mode
+  npx claude-code-automation -d -i 600    # Run daemon with 10-minute interval
+  `);
+}
+
 // Global variables for daemon mode
 let isShuttingDown = false;
 let daemonTimer: NodeJS.Timeout | null = null;
@@ -55,6 +98,15 @@ async function main(): Promise<void> {
   const logger = new Logger();
   
   try {
+    // Parse CLI arguments
+    const cliArgs = parseArguments();
+    
+    // Show help if requested
+    if (cliArgs.help) {
+      showHelp();
+      process.exit(0);
+    }
+    
     // Setup graceful shutdown
     setupGracefulShutdown(logger);
 
@@ -64,12 +116,16 @@ async function main(): Promise<void> {
     validateConfig(config);
     logger.success('Configuration loaded successfully');
 
+    // Override daemon mode and interval from CLI arguments
+    const finalDaemonMode = cliArgs.daemon || config.daemonMode;
+    const finalInterval = cliArgs.interval || config.daemonInterval;
+
     // Initialize automation
     const automation = new IssueAutomation(config, logger);
 
-    if (config.daemonMode) {
+    if (finalDaemonMode) {
       // Run in daemon mode
-      await runDaemon(logger, automation, config.daemonInterval);
+      await runDaemon(logger, automation, finalInterval);
       
       // Keep process alive in daemon mode
       return new Promise(() => {
@@ -85,6 +141,12 @@ async function main(): Promise<void> {
     }
 
   } catch (error) {
+    if (error instanceof Error && error.message.includes('Unknown argument')) {
+      console.error(`Error: ${error.message}`);
+      console.error('Use --help for usage information.');
+      process.exit(1);
+    }
+    
     logger.error(`Fatal error: ${error}`);
     console.error('\n## 🤖 Issue Automation Summary');
     console.error('');
