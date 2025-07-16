@@ -1,0 +1,30 @@
+{
+  "name": "claude-code-automation",
+  "version": "1.0.0",
+  "description": "GitHub Issue automation script for claude-code-automation",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-esm src/index.ts",
+    "clean": "rimraf dist",
+    "run:automation": "npm run build && npm run start"
+  },
+  "keywords": ["github", "automation", "issues", "typescript"],
+  "author": "claude-code-automation Team",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/rest": "^20.0.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
