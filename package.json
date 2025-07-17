@@ -1,5 +1,5 @@
 {
-  "name": "@gendosu/claude-code-automation",
+  "name": "@gendosupkg/claude-code-automation",
   "version": "1.0.0",
   "description": "GitHub Issue automation script for claude-code-automation",
   "type": "module",

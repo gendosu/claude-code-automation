@@ -23,16 +23,16 @@
 
 ```bash
 # 最新版を直接実行
-npx claude-code-automation-gendosu@latest
+npx @gendosupkg/claude-code-automation@latest
 
 # ヘルプを表示
-npx claude-code-automation-gendosu@latest --help
+npx @gendosupkg/claude-code-automation@latest --help
 
 # デーモンモードで実行
-npx claude-code-automation-gendosu@latest --daemon
+npx @gendosupkg/claude-code-automation@latest --daemon
 
 # カスタム間隔でデーモン実行（10分間隔）
-npx claude-code-automation-gendosu@latest --daemon --interval 600
+npx @gendosupkg/claude-code-automation@latest --daemon --interval 600
 ```
 
 **環境変数設定:**
@@ -41,7 +41,7 @@ npx claude-code-automation-gendosu@latest --daemon --interval 600
 export GITHUB_TOKEN=ghp_your_token_here
 export GITHUB_OWNER=your_username
 export GITHUB_REPO=your_repository
-npx claude-code-automation-gendosu@latest
+npx @gendosupkg/claude-code-automation@latest
 ```
 
 ### 方法2: ローカルセットアップ
